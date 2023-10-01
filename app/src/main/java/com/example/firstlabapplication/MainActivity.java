@@ -2,32 +2,39 @@ package com.example.firstlabapplication;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 
 public class MainActivity extends Activity {
+    public String APP_NAME = "First Lab";
     String[] VALID_COLORS = new String[]{"red", "green", "blue"};
-    Button confirmButton;
+    Map<String, Integer> HASHMAP_COLORS = new HashMap<String, Integer>();
     TextView textView;
     EditText editText;
 
     HashSet<String> validColorsHashSet = new HashSet<String>(Arrays.asList(VALID_COLORS));
 
     public void confirmEditTextValues(View view){
-        textView = (TextView)findViewById(R.id.text_view);
+        textView = findViewById(R.id.text_view);
         editText = findViewById(R.id.edit_text);
-        String userInput = editText.getText().toString();
+        String userInput = editText.getText().toString().trim();
         if (validColorsHashSet.contains(userInput)){
             textView.setText(userInput);
+            Intent eIntent = new Intent(MainActivity.this, SecondActivity.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                eIntent.putExtra("color", HASHMAP_COLORS.getOrDefault(userInput, Color.WHITE));
+            }
+            startActivity(eIntent);
         }
         else{
             StringBuilder errorText = new StringBuilder("Valid colors are ");
@@ -46,44 +53,18 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+        HASHMAP_COLORS.put("red", Color.RED);
+        HASHMAP_COLORS.put("green", Color.GREEN);
+        HASHMAP_COLORS.put("blue", Color.BLUE);
     }
 
-
-    protected void onStart() {
-        super.onStart();
-        Toast.makeText(getApplicationContext(), "Called onStart()", Toast.LENGTH_LONG).show();
-        Log.d("State", "Called onStart()");
-    }
-
-    protected void onResume() {
-        super.onResume();
-        Toast.makeText(getApplicationContext(), "Called onResume()", Toast.LENGTH_LONG).show();
-        Log.d("State", "Called onResume()");
-    }
-
-    protected void onPause() {
-        super.onPause();
-        Toast.makeText(getApplicationContext(), "Called onPause()", Toast.LENGTH_LONG).show();
-        Log.d("State", "Called onPause()");
-    }
-
-    protected void onStop() {
-        super.onStop();
-        Toast.makeText(getApplicationContext(), "Called onStop()", Toast.LENGTH_LONG).show();
-        Log.d("State", "Called onStop()");
-    }
-
-    protected void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(getApplicationContext(), "Called onDestroy()", Toast.LENGTH_LONG).show();
-        Log.d("State", "Called onDestroy()");
-    }
 
     protected void onRestart() {
         super.onRestart();
-        Toast.makeText(getApplicationContext(), "Called onRestart()", Toast.LENGTH_LONG).show();
-        Log.d("State", "Called onRestart()");
+        textView = findViewById(R.id.text_view);
+        textView.setText(APP_NAME);
+        editText = findViewById(R.id.edit_text);
+        editText.getText().clear();
     }
 
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FirstLabApplication</string>
+    <string name="APP_NAME">First Lab</string>
 </resources>
